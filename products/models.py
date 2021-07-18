@@ -2,20 +2,17 @@ from django.db import models
 
 class Menu(models.Model):
     name = models.CharField(max_length=45)
-
+    class Meta: #테이블 이름 지정
+        db_table = 'menus' #안 쓰면 products_menus라고 컬럼이름 자동 생성
     def __str__(self):
         return self.name
-    class Meta:
-        db_table = 'menus'
 
 class Category(models.Model):
     name = models.CharField(max_length=45)
     menu = models.ForeignKey('Menu', on_delete=models.CASCADE, default='')
-    #You are trying to add a non-nullable field '필드명' to post without a default에러가 떠서 디폴트를 추가했다
-    #외래키 쓸 때 장고가 알아서 _id를 붙여서 데이터베이스에 넘겨서 _id를 안 써도 된다.
-    class Meta: #테이블 이름 지정
-        db_table='categories' #이거 안 쓰면 categorys라고 자동 생성
-    
+    #default에러가 떠서 디폴트를 추가했다 #외래키 쓸 때 장고가 알아서 _id를 붙여서 데이터베이스에 넘겨서 _id를 안 써도 된다.
+    class Meta: 
+        db_table='categories' 
     def __str__(self):
         return self.name
 
@@ -28,15 +25,13 @@ class Product(models.Model):
     class Meta:
         db_table = 'products'
     def __str__(self):
-        return self.name
+        return self.english_name
 
 class Image(models.Model):
     image_url = models.URLField(max_length=2000)
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
     class Meta:
         db_table = 'images'
-    def __str__(self):
-        return self.name
 
 class Allergy(models.Model):
     name = models.CharField(max_length=45)
@@ -62,5 +57,3 @@ class Nutrition(models.Model):
     product = models.OneToOneField('Product', on_delete=models.CASCADE)
     class Meta:
         db_table = 'nutritions'
-    def __str__(self):
-        return self.name
